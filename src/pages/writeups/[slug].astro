@@ -1,0 +1,23 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import { Content } from "@astro/types"; // not required, just clarity
+
+export async function getStaticPaths() {
+  const writeups = await getCollection("writeups");
+  return writeups.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+---
+<Layout title={post.data.title}>
+  <article class="writeup-article">
+    <h1>{post.data.title}</h1>
+    <p class="writeup-date">{post.data.date}</p>
+    <!-- The correct way to render Markdown -->
+    {post.body ? <Fragment set:html={post.body} /> : <p>No content found.</p>}
+  </article>
+</Layout>
