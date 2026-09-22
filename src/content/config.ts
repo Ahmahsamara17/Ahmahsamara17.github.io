@@ -8,5 +8,13 @@ const writeups = defineCollection({
   }),
 });
 
-export const collections = { writeups };
+const works = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    date: z.string(),
+    summary: z.string(),
+    status: z.enum(["draft", "published"]).default("published"),
+  }),
+});
 
+export const collections = { writeups, works };

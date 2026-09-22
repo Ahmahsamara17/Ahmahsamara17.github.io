@@ -1,0 +1,32 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const works = (await getCollection("works")).sort(
+  (a, b) => Date.parse(b.data.date) - Date.parse(a.data.date),
+);
+---
+
+<Layout title="Works | Sammy">
+  <section class="works-page">
+    <header class="section-heading">
+      <p class="section-eyebrow">Research & projects</p>
+      <h1>Works</h1>
+      <p>Longer-form notes from things I have built, investigated, or learned.</p>
+    </header>
+
+    <div class="work-list">
+      {works.map((work) => (
+        <a class="work-card" href={`works/${work.slug}/`}>
+          <div class="work-card-meta">
+            <time datetime={work.data.date}>{work.data.date}</time>
+            {work.data.status === "draft" && <span class="status-badge">Work in progress</span>}
+          </div>
+          <h2>{work.data.title}</h2>
+          <p>{work.data.summary}</p>
+          <span class="work-card-link">Read current draft <span aria-hidden="true">→</span></span>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>

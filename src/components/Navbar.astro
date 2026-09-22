@@ -1,7 +1,76 @@
 <nav class="site-nav" aria-label="Primary navigation">
-  <ul class="nav-links">
-    <li><a href="./" class="nav-link">Home</a></li>
-    <li><a href="writeups/" class="nav-link">Writeups</a></li>
-    <li><a href="contact/" class="nav-link">Contact</a></li>
+  <button
+    class="nav-toggle"
+    type="button"
+    aria-expanded="true"
+    aria-controls="primary-nav-links"
+    title="Collapse navigation"
+  >
+    <span class="nav-toggle-icon" aria-hidden="true">‹</span>
+    <span class="sr-only nav-toggle-label">Collapse navigation</span>
+  </button>
+
+  <ul class="nav-links" id="primary-nav-links">
+    <li>
+      <a href="./" class="nav-link" aria-label="Home">
+        <span class="nav-icon" aria-hidden="true">⌂</span>
+        <span class="nav-label">Home</span>
+      </a>
+    </li>
+    <li>
+      <a href="works/" class="nav-link" aria-label="Works">
+        <span class="nav-icon" aria-hidden="true">◇</span>
+        <span class="nav-label">Works</span>
+      </a>
+    </li>
+    <li>
+      <a href="writeups/" class="nav-link" aria-label="Writeups">
+        <span class="nav-icon nav-icon-code" aria-hidden="true">&gt;_</span>
+        <span class="nav-label">Writeups</span>
+      </a>
+    </li>
+    <li>
+      <a href="contact/" class="nav-link" aria-label="Contact">
+        <span class="nav-icon" aria-hidden="true">@</span>
+        <span class="nav-label">Contact</span>
+      </a>
+    </li>
   </ul>
 </nav>
+
+<script>
+  const nav = document.querySelector(".site-nav");
+  const toggle = nav?.querySelector(".nav-toggle");
+  const storageKey = "sammy-nav-collapsed";
+
+  if (nav instanceof HTMLElement && toggle instanceof HTMLButtonElement) {
+    const setCollapsed = (collapsed) => {
+      nav.dataset.collapsed = String(collapsed);
+      toggle.setAttribute("aria-expanded", String(!collapsed));
+      toggle.title = collapsed ? "Expand navigation" : "Collapse navigation";
+
+      const label = toggle.querySelector(".nav-toggle-label");
+      if (label) {
+        label.textContent = collapsed ? "Expand navigation" : "Collapse navigation";
+      }
+    };
+
+    let collapsed = false;
+    try {
+      collapsed = localStorage.getItem(storageKey) === "true";
+    } catch {
+      // Storage may be unavailable in privacy-focused browser modes.
+    }
+    setCollapsed(collapsed);
+
+    toggle.addEventListener("click", () => {
+      const nextState = nav.dataset.collapsed !== "true";
+      setCollapsed(nextState);
+      try {
+        localStorage.setItem(storageKey, String(nextState));
+      } catch {
+        // The control still works for the current page without storage.
+      }
+    });
+  }
+</script>

@@ -1,0 +1,38 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const works = await getCollection("works");
+  return works.map((work) => ({
+    params: { slug: work.slug },
+    props: { work },
+  }));
+}
+
+const { work } = Astro.props;
+const { Content } = await render(work);
+---
+
+<Layout title={`${work.data.title} | Sammy`}>
+  <div class="work-page">
+    <a class="back-link" href="works/">← All works</a>
+
+    <article class="work-article">
+      <div class="work-meta">
+        <time datetime={work.data.date}>{work.data.date}</time>
+        {work.data.status === "draft" && <span class="status-badge">Work in progress</span>}
+      </div>
+
+      {work.data.status === "draft" && (
+        <p class="work-progress-note">
+          This analysis is still in progress. I’m publishing my notes as I work through the sample.
+        </p>
+      )}
+
+      <div class="work-body">
+        <Content />
+      </div>
+    </article>
+  </div>
+</Layout>
