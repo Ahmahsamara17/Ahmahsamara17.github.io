@@ -662,12 +662,27 @@ a:focus-visible {
   height: 0.35rem;
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1280px) {
   .work-body .thought {
     position: absolute;
-    left: calc(100% + 2rem);
+    right: -2rem;
     width: 12rem;
     margin-top: -0.25rem;
+  }
+}
+
+@media (min-width: 1100px) {
+  body:has(.site-nav[data-collapsed="true"]) .work-body .thought {
+    position: absolute;
+    right: -14rem;
+    width: 12rem;
+    margin-top: -0.25rem;
+  }
+}
+
+@media (min-width: 1500px) {
+  .work-body .thought {
+    right: -14rem;
   }
 }
 
