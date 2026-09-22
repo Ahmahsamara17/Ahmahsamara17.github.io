@@ -101,6 +101,7 @@ main {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  min-width: 0;
   min-height: 100vh;
 }
 
@@ -113,6 +114,13 @@ main {
   display: flex;
   flex-direction: column;
   gap: clamp(2rem, 5vw, 3rem);
+  min-width: 0;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
 }
 
 .site-nav {
@@ -313,6 +321,7 @@ h1 {
   gap: 0.6rem;
   width: fit-content;
   font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
 .hero-eyebrow {
@@ -386,6 +395,7 @@ a:focus-visible {
 .work-page {
   display: grid;
   gap: clamp(1.75rem, 4vw, 2.75rem);
+  min-width: 0;
 }
 
 .section-heading {
@@ -476,6 +486,7 @@ a:focus-visible {
 
 .work-article {
   position: relative;
+  min-width: 0;
   padding: clamp(1.4rem, 5vw, 3.25rem);
   border: 1px solid var(--color-border);
   border-radius: 1.4rem;
@@ -503,10 +514,12 @@ a:focus-visible {
 
 .work-body {
   position: relative;
+  min-width: 0;
   margin-top: 2.5rem;
   color: #f7f5fb;
   font-size: 1.02rem;
   line-height: 1.8;
+  overflow-wrap: anywhere;
 }
 
 .work-body :is(p, li) {
@@ -706,14 +719,15 @@ a:focus-visible {
     border-right: none;
     border-bottom: 1px solid var(--color-border, rgba(212, 185, 255, 0.5));
     border-radius: 0 0 1.4rem 1.4rem;
-    padding: clamp(1.8rem, 5vw, 2.5rem) clamp(1.4rem, 5vw, 2rem);
+    padding: 1.25rem clamp(1rem, 4vw, 2rem);
     box-shadow: 0 24px 60px rgba(15, 5, 40, 0.45);
-  align-items: center;
-  text-align: center;
-  gap: 1.5rem;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
   }
 
   .nav-links {
+    width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
@@ -725,6 +739,7 @@ a:focus-visible {
   }
 
   .nav-link {
+    min-height: 44px;
     padding: 0.55rem 1.1rem;
   }
 
@@ -734,7 +749,14 @@ a:focus-visible {
   }
 
   .page-content {
+    width: 100%;
     max-width: 720px;
+  }
+
+  .work-body pre:not(.code-custom-width) {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
   }
 
   .work-body pre.code-custom-width {
@@ -745,11 +767,13 @@ a:focus-visible {
 
 @media (max-width: 640px) {
   .page-content {
-    padding: clamp(2.25rem, 9vw, 3.4rem) clamp(1.25rem, 6vw, 2rem);
+    gap: 1.6rem;
+    padding: 2rem 1rem;
   }
 
   .hero {
-    padding: clamp(2.4rem, 12vw, 3.8rem) 0;
+    min-height: auto;
+    padding: 3.5rem 0;
   }
 
   .hero-intro {
@@ -757,15 +781,74 @@ a:focus-visible {
   }
 
   .hero-eyebrow {
-    letter-spacing: 0.35em;
+    letter-spacing: 0.25em;
   }
 
   .nav-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem;
   }
 
+  .nav-link {
+    justify-content: center;
+    padding-inline: 0.65rem;
+  }
+
+  .works-page,
+  .work-page {
+    gap: 1.5rem;
+  }
+
+  .work-card {
+    padding: 1.25rem;
+    border-radius: 1rem;
+  }
+
   .work-article {
-    padding-inline: 1.1rem;
+    padding: 1.25rem 1rem 1.6rem;
+    border-radius: 1rem;
+  }
+
+  .work-meta {
+    gap: 0.55rem;
+  }
+
+  .work-progress-note {
+    margin-top: 1rem;
+    padding: 0.8rem 0.85rem;
+    font-size: 0.82rem;
+  }
+
+  .work-body {
+    margin-top: 2rem;
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .work-body h1 {
+    margin-bottom: 1.5rem;
+    font-size: clamp(1.9rem, 10vw, 2.5rem);
+  }
+
+  .work-body h2 {
+    margin-top: 2.75rem;
+    font-size: 1.4rem;
+  }
+
+  .work-body h3 {
+    margin-top: 2rem;
+    font-size: 1.15rem;
+  }
+
+  .work-body :is(ul, ol) {
+    padding-left: 1.3rem;
+  }
+
+  .work-body .thought {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.9rem 1rem;
   }
 
   .work-body pre,
@@ -774,6 +857,16 @@ a:focus-visible {
     width: 100%;
     max-width: 100%;
     margin-left: 0;
+    padding: 0.9rem !important;
     transform: none;
+  }
+
+  .work-body pre code {
+    font-size: 0.78rem;
+    line-height: 1.55;
+  }
+
+  .site-footer {
+    padding-block: 1.5rem 2rem;
   }
 }
