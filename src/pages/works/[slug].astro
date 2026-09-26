@@ -12,6 +12,19 @@ export async function getStaticPaths() {
 
 const { work } = Astro.props;
 const { Content } = await render(work);
+
+const videoModules = import.meta.glob("../../content/works/*.{webm,mp4}", {
+  eager: true,
+  query: "?url",
+  import: "default",
+});
+
+const videoSources = Object.fromEntries(
+  Object.entries(videoModules).map(([path, url]) => [
+    path.split("/").pop(),
+    url,
+  ]),
+);
 ---
 
 <Layout title={`${work.data.title} | Sammy`}>
@@ -35,4 +48,14 @@ const { Content } = await render(work);
       </div>
     </article>
   </div>
+
+  <script define:vars={{ videoSources }}>
+    document.querySelectorAll("video[data-work-video]").forEach((element) => {
+      if (!(element instanceof HTMLVideoElement)) return;
+
+      const filename = element.dataset.workVideo;
+      const source = filename ? videoSources[filename] : undefined;
+      if (source) element.src = source;
+    });
+  </script>
 </Layout>

@@ -595,6 +595,66 @@ a:focus-visible {
   border-left: 3px solid var(--color-accent);
 }
 
+.work-body p:has(> img) {
+  position: relative;
+  left: 50%;
+  width: min(130%, calc(100vw - 300px));
+  max-width: calc(100vw - 300px);
+  margin: 2rem 0 0.75rem;
+  transform: translateX(-50%);
+}
+
+.work-body img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(188, 168, 235, 0.3);
+  border-radius: 0.7rem;
+  background: #0b0810;
+  box-shadow: 0 16px 38px rgba(8, 4, 16, 0.35);
+}
+
+.work-body .image-caption {
+  display: block;
+  margin: 0 auto 2rem;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.work-body p:has(> .image-caption) {
+  margin: 0;
+}
+
+.work-body .work-video {
+  position: relative;
+  left: 50%;
+  display: block;
+  width: min(130%, calc(100vw - 300px));
+  max-width: calc(100vw - 300px);
+  height: auto;
+  margin: 2rem 0 0.75rem;
+  border: 1px solid rgba(188, 168, 235, 0.3);
+  border-radius: 0.7rem;
+  background: #0b0810;
+  box-shadow: 0 16px 38px rgba(8, 4, 16, 0.35);
+  transform: translateX(-50%);
+}
+
+.work-body .video-caption {
+  display: block;
+  margin: 0 auto 2rem;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.work-body p:has(> .video-caption) {
+  margin: 0;
+}
+
 .work-body :not(pre) > code {
   padding: 0.15rem 0.38rem;
   border: 1px solid rgba(205, 186, 243, 0.24);
@@ -763,6 +823,16 @@ a:focus-visible {
     width: min(var(--code-width), calc(100vw - 2rem));
     max-width: calc(100vw - 2rem);
   }
+
+  .work-body p:has(> img) {
+    width: min(130%, calc(100vw - 2rem));
+    max-width: calc(100vw - 2rem);
+  }
+
+  .work-body .work-video {
+    width: min(130%, calc(100vw - 2rem));
+    max-width: calc(100vw - 2rem);
+  }
 }
 
 @media (max-width: 640px) {
@@ -858,6 +928,20 @@ a:focus-visible {
     max-width: 100%;
     margin-left: 0;
     padding: 0.9rem !important;
+    transform: none;
+  }
+
+  .work-body p:has(> img) {
+    left: auto;
+    width: 100%;
+    max-width: 100%;
+    transform: none;
+  }
+
+  .work-body .work-video {
+    left: auto;
+    width: 100%;
+    max-width: 100%;
     transform: none;
   }
 
