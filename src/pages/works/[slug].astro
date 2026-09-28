@@ -25,6 +25,22 @@ const videoSources = Object.fromEntries(
     url,
   ]),
 );
+
+const artifactModules = import.meta.glob(
+  "../../content/works/*.{bin,doc,docx,pdf,ps1,py,txt,vba,zip}",
+  {
+    eager: true,
+    query: "?url&no-inline",
+    import: "default",
+  },
+);
+
+const artifactSources = Object.fromEntries(
+  Object.entries(artifactModules).map(([path, url]) => [
+    path.split("/").pop(),
+    url,
+  ]),
+);
 ---
 
 <Layout title={`${work.data.title} | Sammy`}>
@@ -49,13 +65,24 @@ const videoSources = Object.fromEntries(
     </article>
   </div>
 
-  <script define:vars={{ videoSources }}>
+  <script define:vars={{ videoSources, artifactSources }}>
     document.querySelectorAll("video[data-work-video]").forEach((element) => {
       if (!(element instanceof HTMLVideoElement)) return;
 
       const filename = element.dataset.workVideo;
       const source = filename ? videoSources[filename] : undefined;
       if (source) element.src = source;
+    });
+
+    document.querySelectorAll("a[data-work-download]").forEach((element) => {
+      if (!(element instanceof HTMLAnchorElement)) return;
+
+      const filename = element.dataset.workDownload;
+      const source = filename ? artifactSources[filename] : undefined;
+      if (!source || !filename) return;
+
+      element.href = source;
+      element.download = filename;
     });
   </script>
 </Layout>
