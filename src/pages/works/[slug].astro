@@ -84,5 +84,44 @@ const artifactSources = Object.fromEntries(
       element.href = source;
       element.download = filename;
     });
+
+    const findCodeBlock = (element, direction) => {
+      let sibling = element[direction];
+      while (sibling) {
+        if (sibling instanceof HTMLPreElement) return sibling;
+        sibling = sibling[direction];
+      }
+      return undefined;
+    };
+
+    document.querySelectorAll("[data-code-comparison]").forEach((marker) => {
+      const original = findCodeBlock(marker, "previousElementSibling");
+      const renamed = findCodeBlock(marker, "nextElementSibling");
+      if (!original || !renamed) return;
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "code-comparison-wrapper";
+
+      const toggle = document.createElement("button");
+      toggle.className = "code-comparison-toggle";
+      toggle.type = "button";
+
+      let showingRenamed = true;
+      const updateVersion = () => {
+        original.hidden = showingRenamed;
+        renamed.hidden = !showingRenamed;
+        toggle.textContent = showingRenamed ? "no name" : "name";
+        toggle.setAttribute("aria-pressed", String(showingRenamed));
+      };
+
+      toggle.addEventListener("click", () => {
+        showingRenamed = !showingRenamed;
+        updateVersion();
+      });
+
+      marker.replaceWith(wrapper);
+      wrapper.append(original, renamed, toggle);
+      updateVersion();
+    });
   </script>
 </Layout>
