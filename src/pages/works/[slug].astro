@@ -11,9 +11,11 @@ export async function getStaticPaths() {
 }
 
 const { work } = Astro.props;
-const { Content } = await render(work);
+const { Content, headings } = await render(work);
+const indexHeadings = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const workPath = `/works/${work.slug}/`;
 
-const videoModules = import.meta.glob("../../content/works/*.{webm,mp4}", {
+const videoModules = import.meta.glob("../../content/works/**/*.{webm,mp4}", {
   eager: true,
   query: "?url",
   import: "default",
@@ -27,7 +29,7 @@ const videoSources = Object.fromEntries(
 );
 
 const artifactModules = import.meta.glob(
-  "../../content/works/*.{bin,doc,docx,pdf,ps1,py,txt,vba,zip}",
+  "../../content/works/**/*.{bin,doc,docx,pdf,ps1,py,txt,vba,zip}",
   {
     eager: true,
     query: "?url&no-inline",
@@ -50,13 +52,19 @@ const artifactSources = Object.fromEntries(
     <article class="work-article">
       <div class="work-meta">
         <time datetime={work.data.date}>{work.data.date}</time>
-        {work.data.status === "draft" && <span class="status-badge">Work in progress</span>}
       </div>
 
-      {work.data.status === "draft" && (
-        <p class="work-progress-note">
-          This analysis is still in progress. I’m publishing my notes as I work through the sample.
-        </p>
+      {indexHeadings.length > 0 && (
+        <nav class="article-index" aria-label="Article index">
+          <p class="article-index-title">Index</p>
+          <ul>
+            {indexHeadings.map((heading) => (
+              <li class:list={{ "article-index-subsection": heading.depth === 3 }}>
+                <a href={`${workPath}#${heading.slug}`}>{heading.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
       )}
 
       <div class="work-body">
@@ -66,6 +74,12 @@ const artifactSources = Object.fromEntries(
   </div>
 
   <script define:vars={{ videoSources, artifactSources }}>
+    const articleIndex = document.querySelector(".article-index");
+    const articleIndexMarker = document.querySelector("[data-article-index]");
+    if (articleIndex instanceof HTMLElement && articleIndexMarker instanceof HTMLElement) {
+      articleIndexMarker.replaceWith(articleIndex);
+    }
+
     document.querySelectorAll("video[data-work-video]").forEach((element) => {
       if (!(element instanceof HTMLVideoElement)) return;
 
@@ -101,6 +115,8 @@ const artifactSources = Object.fromEntries(
 
       const wrapper = document.createElement("div");
       wrapper.className = "code-comparison-wrapper";
+      const toggleRight = marker.dataset.toggleRight;
+      if (toggleRight) wrapper.style.setProperty("--code-toggle-right", toggleRight);
 
       const toggle = document.createElement("button");
       toggle.className = "code-comparison-toggle";
